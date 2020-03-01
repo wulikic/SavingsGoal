@@ -1,13 +1,16 @@
 package com.vesna.roundup.data.network
 
+import com.vesna.roundup.data.network.model.AmountBodyRequest
 import com.vesna.roundup.data.network.model.TransactionsResponse
 import com.vesna.roundup.domain.model.Account
 import com.vesna.roundup.domain.model.ApiError
 import com.vesna.roundup.domain.model.SavingsGoal
 import com.vesna.roundup.domain.model.Transaction
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
+import java.util.*
 
 class Api(
     private val retrofitApi: RetrofitApi,
@@ -55,6 +58,23 @@ class Api(
                     )
                 }
             }
+    }
+
+    fun addMoney(
+        savingsGoalId: String,
+        accountId: String,
+        transferUid: UUID,
+        amount: Int,
+        currency: String
+    ): Completable {
+        return retrofitApi.addMoneyToSavingsGoal(
+            auth = authHeader,
+            accountId = accountId,
+            savingsGoalUid = savingsGoalId,
+            transferUid = transferUid.toString(),
+            body = AmountBodyRequest(currency = currency, minorUnits = amount)
+        )
+            .ignoreElement()
     }
 
     private fun TransactionsResponse.FeedItem.direction(): Transaction.Direction {

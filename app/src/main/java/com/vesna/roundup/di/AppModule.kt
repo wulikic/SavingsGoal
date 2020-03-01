@@ -27,8 +27,8 @@ class AppModule(private val context: Context) {
     @Provides
     fun mainViewModelFactory(getWeeks: GetAllWeeksSinceAccountCreation,
                              calculateRoundUp: CalculateRoundUp,
-                             getSavingsGoal: GetOrCreateSavingsGoal) =
-        MainViewModelFactory(getWeeks, calculateRoundUp, getSavingsGoal)
+                             addToSavingsGoal: AddToSavingsGoal) =
+        MainViewModelFactory(getWeeks, calculateRoundUp, addToSavingsGoal)
 
     @Provides
     fun getAllWeeksSinceAccountCreation(getAccount: GetAccount, getWeeks: GetWeeks) =
@@ -36,6 +36,10 @@ class AppModule(private val context: Context) {
             getAccount = getAccount,
             getWeeks = getWeeks
         )
+
+    @Provides
+    fun addToSavingsGoal(api: Api, getAccount: GetAccount, getOrCreateSavingsGoal: GetOrCreateSavingsGoal) =
+        AddToSavingsGoal(api = api, getAccount = getAccount, getOrCreateSavingsGoal = getOrCreateSavingsGoal)
 
     @Provides
     fun calculateRoundUp(api: Api, getAccount: GetAccount) = CalculateRoundUp(api, getAccount)

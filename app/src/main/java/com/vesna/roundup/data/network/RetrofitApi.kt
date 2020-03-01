@@ -1,8 +1,6 @@
 package com.vesna.roundup.data.network
 
-import com.vesna.roundup.data.network.model.AccountsResponse
-import com.vesna.roundup.data.network.model.CreateSavingsGoalResponse
-import com.vesna.roundup.data.network.model.TransactionsResponse
+import com.vesna.roundup.data.network.model.*
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -25,5 +23,15 @@ interface RetrofitApi {
         @Path("categoryUid") categoryUid: String,
         @Query("minTransactionTimestamp") from: String,
         @Query("maxTransactionTimestamp") to: String): Single<TransactionsResponse.FeedItems>
+
+    @Headers(value = ["Accept: application/json", "User-Agent: Test"])
+    @GET("/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/add-money/{transferUid}")
+    fun addMoneyToSavingsGoal(
+        @Header("Authorization") auth: String,
+        @Path("accountUid") accountId: String,
+        @Path("savingsGoalUid") savingsGoalUid: String,
+        @Query("transferUid") transferUid: String,
+        @Body body: AmountBodyRequest
+    ): Single<AddMoneyToSavingsGoalResponse.SavingsGoalTransfer>
 
 }

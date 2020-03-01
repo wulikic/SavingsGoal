@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateRoundUp(roundUpState: RoundUpState) {
         roundUpState.roundUp?.let {
-            roundUpView.text = String.format("£ %s", it)
+            roundUpView.text = String.format("£ %s", it / 100.0)
         } ?: kotlin.run {
             roundUpView.text = null
         }

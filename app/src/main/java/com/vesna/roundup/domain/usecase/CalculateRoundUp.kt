@@ -8,7 +8,7 @@ import io.reactivex.Single
 // only for out transactions
 class CalculateRoundUp(private val api: Api, private val getAccount: GetAccount) {
 
-    fun execute(period: Period): Single<Double> {
+    fun execute(period: Period): Single<Int> {
         return getAccount.execute().flatMap { account ->
             api.getTransactions(period.from, period.to, account)
                 .map { list ->
@@ -16,7 +16,7 @@ class CalculateRoundUp(private val api: Api, private val getAccount: GetAccount)
                         .map { transaction ->
                             100 - transaction.amountInP % 100
                         }.sum()
-                }.map { it / 100.0 }
+                }
         }
     }
 }
