@@ -98,7 +98,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateRoundUp(roundUpState: RoundUpState) {
-        roundUpView.text = String.format("£ %.00f", roundUpState.roundUp)
+        roundUpState.roundUp?.let {
+            roundUpView.text = String.format("£ %s", it)
+        } ?: kotlin.run {
+            roundUpView.text = null
+        }
     }
 
     override fun onStop() {

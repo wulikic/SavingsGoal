@@ -11,7 +11,7 @@ import org.joda.time.format.DateTimeFormatter
 
 class Api(
     private val retrofitApi: RetrofitApi,
-    private val token: String,
+    token: String,
     private val apiDateFormatter: DateTimeFormatter
 ) {
 
@@ -42,15 +42,15 @@ class Api(
     fun getTransactions(from: DateTime, to: DateTime, account: Account): Single<List<Transaction>> {
         return retrofitApi.transactions(
             auth = authHeader,
-            from = "2020-02-08T12:34:21.000Z", //from.toString(apiDateFormatter),
-            to = "2020-03-08T12:34:21.000Z", //to.toString(apiDateFormatter),
+            from = from.toString(apiDateFormatter),
+            to = to.toString(apiDateFormatter),
             accountId = account.accountId,
             categoryUid = account.defaultCategory
         )
             .map { response ->
                 response.feedItems.map {
                     Transaction(
-                        amount = it.amount.minorUnits/100.0,
+                        amountInP = it.amount.minorUnits,
                         direction = it.direction()
                     )
                 }

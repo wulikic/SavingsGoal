@@ -8,15 +8,14 @@ import com.vesna.roundup.data.localstorage.AccountLocalStorage
 import com.vesna.roundup.data.localstorage.SavingsGoalStorage
 import com.vesna.roundup.data.network.Api
 import com.vesna.roundup.data.network.RetrofitApi
-import com.vesna.roundup.domain.model.SavingsGoal
 import com.vesna.roundup.domain.repo.AccountRepo
 import com.vesna.roundup.domain.repo.SavingsGoalRepo
 import com.vesna.roundup.domain.usecase.*
 import com.vesna.roundup.presentation.MainViewModelFactory
 import dagger.Module
 import dagger.Provides
-import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -71,8 +70,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun apiDateFormatter(): DateTimeFormatter =
-        DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")   // 2017-05-08T12:34:21.000Z
+    fun apiDateFormatter(): DateTimeFormatter = ISODateTimeFormat.dateTime()  // 2017-05-08T12:34:21.000Z
 
     @Provides
     fun accountLocalStorage() =

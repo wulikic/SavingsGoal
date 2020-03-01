@@ -4,7 +4,6 @@ import com.vesna.roundup.data.network.Api
 import com.vesna.roundup.domain.model.Period
 import com.vesna.roundup.domain.model.Transaction
 import io.reactivex.Single
-import kotlin.math.ceil
 
 // only for out transactions
 class CalculateRoundUp(private val api: Api, private val getAccount: GetAccount) {
@@ -15,9 +14,9 @@ class CalculateRoundUp(private val api: Api, private val getAccount: GetAccount)
                 .map { list ->
                     list.filter { it.direction == Transaction.Direction.OUT }
                         .map { transaction ->
-                            ceil(transaction.amount) - transaction.amount
+                            100 - transaction.amountInP % 100
                         }.sum()
-                }
+                }.map { it / 100.0 }
         }
     }
 }
