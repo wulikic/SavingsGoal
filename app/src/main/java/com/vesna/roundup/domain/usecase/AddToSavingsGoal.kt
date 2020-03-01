@@ -1,6 +1,5 @@
 package com.vesna.roundup.domain.usecase
 
-import com.vesna.roundup.data.network.Api
 import com.vesna.roundup.domain.model.Account
 import com.vesna.roundup.domain.model.SavingsGoal
 import io.reactivex.Completable
@@ -9,12 +8,12 @@ import io.reactivex.functions.BiFunction
 import java.util.*
 
 class AddToSavingsGoal(
-    private val api: Api,
+    private val transferMoneyToSavingsGoal: TransferMoneyToSavingsGoal,
     private val getAccount: GetAccount,
     private val getOrCreateSavingsGoal: GetOrCreateSavingsGoal
 ) {
 
-    fun execute(amount: Int): Completable {
+    fun execute(amount: Int, transferUid: UUID): Completable {
         return Single.zip(
             getAccount.execute(),
             getOrCreateSavingsGoal.execute(),
@@ -25,12 +24,12 @@ class AddToSavingsGoal(
                 )
             })
             .flatMapCompletable { pair ->
-                api.addMoney(
-                    savingsGoalId = pair.second.uid,
-                    accountId = pair.first.accountId,
-                    transferUid = UUID.randomUUID(),
+                transferMoneyToSavingsGoal.execute(
+                    savingsGoal = pair.second,
+                    account = pair.first,
                     amount = amount,
-                    currency = "GBP"
+                    currency = "GBP",
+                    transferUUID = transferUid
                 )
             }
     }

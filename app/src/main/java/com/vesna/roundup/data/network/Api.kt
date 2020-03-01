@@ -1,9 +1,11 @@
 package com.vesna.roundup.data.network
 
-import com.vesna.roundup.data.network.model.AmountBodyRequest
+import com.vesna.roundup.data.localstorage.AccountLocalStorage
+import com.vesna.roundup.data.network.model.AddToSavingsGoalRequest
+import com.vesna.roundup.data.network.model.CreateSavingsGoalRequest
 import com.vesna.roundup.data.network.model.TransactionsResponse
+import com.vesna.roundup.domain.errors.ApiError
 import com.vesna.roundup.domain.model.Account
-import com.vesna.roundup.domain.model.ApiError
 import com.vesna.roundup.domain.model.SavingsGoal
 import com.vesna.roundup.domain.model.Transaction
 import io.reactivex.Completable
@@ -15,6 +17,7 @@ import java.util.*
 class Api(
     private val retrofitApi: RetrofitApi,
     token: String,
+    private val accountLocalStorage: AccountLocalStorage,
     private val apiDateFormatter: DateTimeFormatter
 ) {
 
@@ -32,14 +35,19 @@ class Api(
         }
     }
 
-    fun createSavingGoal(): Single<SavingsGoal> {
-        return retrofitApi.createSavingsGoal(authHeader).map { response ->
-            if (response.success) {
-                SavingsGoal(response.savingsGoalUid)
-            } else {
-                throw ApiError("Creating savings goal failed")
+    fun createSavingGoal(name: String, currency: String): Single<SavingsGoal> {
+        return retrofitApi.createSavingsGoal(
+            auth = authHeader,
+            accountId = accountLocalStorage.read()!!.accountId,
+            body = CreateSavingsGoalRequest.Body(name, currency)
+        )
+            .map { response ->
+                if (response.success) {
+                    SavingsGoal(response.savingsGoalUid)
+                } else {
+                    throw ApiError("Creating savings goal failed")
+                }
             }
-        }
     }
 
     fun getTransactions(from: DateTime, to: DateTime, account: Account): Single<List<Transaction>> {
@@ -72,7 +80,12 @@ class Api(
             accountId = accountId,
             savingsGoalUid = savingsGoalId,
             transferUid = transferUid.toString(),
-            body = AmountBodyRequest(currency = currency, minorUnits = amount)
+            body = AddToSavingsGoalRequest.Body(
+                AddToSavingsGoalRequest.Amount(
+                    currency = currency,
+                    minorUnits = amount
+                )
+            )
         )
             .ignoreElement()
     }

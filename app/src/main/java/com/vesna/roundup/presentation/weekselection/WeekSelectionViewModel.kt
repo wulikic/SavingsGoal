@@ -1,6 +1,7 @@
 package com.vesna.roundup.presentation.weekselection
 
 import androidx.lifecycle.ViewModel
+import com.vesna.roundup.domain.errors.FetchingAccountFailed
 import com.vesna.roundup.domain.model.Period
 import com.vesna.roundup.domain.usecase.GetAllWeeksSinceAccountCreation
 import io.reactivex.Observable
@@ -12,10 +13,11 @@ import io.reactivex.subjects.PublishSubject
 import org.joda.time.DateTime
 
 class WeekSelectionViewModel(
-    getWeeks: GetAllWeeksSinceAccountCreation) : ViewModel() {
+    getWeeks: GetAllWeeksSinceAccountCreation
+) : ViewModel() {
 
     private val states = BehaviorSubject.create<List<Period>>() // TODO add in progress state
-    private val events = PublishSubject.create<LoadingWeeksError>() // TODO more generic error
+    private val events = PublishSubject.create<WeekSelectionEvent>() // TODO more generic error
 
     private val disposables = CompositeDisposable()
 
@@ -24,7 +26,15 @@ class WeekSelectionViewModel(
             getWeeks.execute(DateTime.now())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ states.onNext(it) }, { events.onNext(LoadingWeeksError) })
+                .subscribe(
+                    { states.onNext(it) },
+                    { e ->
+                        if (e is FetchingAccountFailed) {
+                            events.onNext(ProblemFetchingAccount)
+                        } else {
+                            events.onNext(GenericError)
+                        }
+                    })
         )
     }
 
@@ -34,5 +44,5 @@ class WeekSelectionViewModel(
     }
 
     fun states(): Observable<List<Period>> = states
-    fun events(): Observable<LoadingWeeksError> = events
+    fun events(): Observable<WeekSelectionEvent> = events
 }

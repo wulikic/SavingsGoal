@@ -13,7 +13,9 @@ interface RetrofitApi {
 
     @Headers(value = ["Accept: application/json", "User-Agent: Test"])
     @PUT("/api/v2/account/{accountUid}/savings-goals")
-    fun createSavingsGoal(@Header("Authorization") auth: String): Single<CreateSavingsGoalResponse.SavingsGoal>
+    fun createSavingsGoal(@Header("Authorization") auth: String,
+                          @Path("accountUid") accountId: String,
+                          @Body body: CreateSavingsGoalRequest.Body): Single<CreateSavingsGoalResponse.SavingsGoal>
 
     @Headers(value = ["Accept: application/json", "User-Agent: Test"])
     @GET("/api/v2/feed/account/{accountUid}/category/{categoryUid}/transactions-between")
@@ -25,13 +27,13 @@ interface RetrofitApi {
         @Query("maxTransactionTimestamp") to: String): Single<TransactionsResponse.FeedItems>
 
     @Headers(value = ["Accept: application/json", "User-Agent: Test"])
-    @GET("/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/add-money/{transferUid}")
+    @PUT("/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/add-money/{transferUid}")
     fun addMoneyToSavingsGoal(
         @Header("Authorization") auth: String,
         @Path("accountUid") accountId: String,
         @Path("savingsGoalUid") savingsGoalUid: String,
-        @Query("transferUid") transferUid: String,
-        @Body body: AmountBodyRequest
+        @Path("transferUid") transferUid: String,
+        @Body body: AddToSavingsGoalRequest.Body
     ): Single<AddMoneyToSavingsGoalResponse.SavingsGoalTransfer>
 
 }

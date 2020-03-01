@@ -11,6 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 class RoundUpViewModel(
     private val calculateRoundUp: CalculateRoundUp,
@@ -26,17 +27,17 @@ class RoundUpViewModel(
     fun onPeriodSelected(period: Period) {
         calculateRoundUpDisposable?.disposeIfNotDisposed()
         calculateRoundUpDisposable = calculateRoundUp.execute(period)
-            .doOnSubscribe { states.onNext(currentState().copy(transferInProgress = true)) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doAfterTerminate { states.onNext(currentState().copy(transferInProgress = false)) }
             .subscribe({ states.onNext(currentState().copy(roundUp = it)) }, { e -> events.onNext(FindingRoundUpFailed) })
     }
 
     fun onAddToSavingGoalClicked() {
         states.value?.roundUp?.let {
             disposables.add(
-                addToSavingsGoal.execute(it)
+                addToSavingsGoal.execute(it, UUID.randomUUID())
+                    .doOnSubscribe { states.onNext(currentState().copy(transferInProgress = true)) }
+                    .doAfterTerminate { states.onNext(currentState().copy(transferInProgress = false)) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ events.onNext(MoneyTransferSucceeded) }, { e -> events.onNext(MoneyTransferFailed) })

@@ -5,6 +5,6 @@ interface CreateSavingsGoalResponse {
     data class SavingsGoal(
         val savingsGoalUid: String,
         val success: Boolean,
-        val errors: List<String>
+        val errors: List<String>?
     )
 }

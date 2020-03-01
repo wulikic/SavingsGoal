@@ -13,11 +13,11 @@ class SavingsGoalRepoImpl(
     : SavingsGoalRepo {
 
     override fun createSavingsGoal(): Completable {
-        return api.createSavingGoal()
-            .flatMapCompletable { localStorage.save(it) }
+        return api.createSavingGoal(name = "New Savings Goal", currency = "GBP")
+            .flatMapCompletable { Completable.fromAction { localStorage.save(it) } }
     }
 
     override fun getSavingsGoal(): Maybe<SavingsGoal> {
-        return localStorage.read()
+        return Maybe.fromCallable { localStorage.read() }
     }
 }

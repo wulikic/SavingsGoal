@@ -35,7 +35,7 @@ class CalculateRoundUpTest {
         val account = mockk<Account>()
         every { api.getTransactions(any(), any(), any()) } returns Single.just(listOf(transaction))
         every { getAccount.execute() } returns Single.just(account)
-        sut.execute(Period(DateTime(), DateTime())).test().assertValue(0.5)
+        sut.execute(Period(DateTime(), DateTime())).test().assertValue(50)
     }
 
     @Test
@@ -45,6 +45,6 @@ class CalculateRoundUpTest {
         val account = mockk<Account>()
         every { api.getTransactions(any(), any(), any()) } returns Single.just(listOf(transaction1, transaction2))
         every { getAccount.execute() } returns Single.just(account)
-        sut.execute(Period(DateTime(), DateTime())).test().assertValue(0.8)
+        sut.execute(Period(DateTime(), DateTime())).test().assertValue(80)
     }
 }

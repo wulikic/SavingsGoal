@@ -10,8 +10,9 @@ import com.vesna.roundup.App
 import com.vesna.roundup.R
 import com.vesna.roundup.domain.model.Period
 import com.vesna.roundup.presentation.roundup.*
-import com.vesna.roundup.presentation.weekselection.LoadingWeeksError
+import com.vesna.roundup.presentation.weekselection.ProblemFetchingAccount
 import com.vesna.roundup.presentation.weekselection.UiPeriod
+import com.vesna.roundup.presentation.weekselection.WeekSelectionEvent
 import com.vesna.roundup.presentation.weekselection.WeekSelectionViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -103,7 +104,14 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun handleEvent(event: LoadingWeeksError) {
+    private fun handleEvent(event: WeekSelectionEvent) {
+        val message = when (event) {
+            is ProblemFetchingAccount -> "Can't retrieve information about the user"
+            else -> "Something went wrong"
+        }
+        AlertDialog.Builder(this)
+            .setNeutralButton("Ok", null)
+            .setMessage(message).create().show()
     }
 
     private fun handleEvent(event: Event) {
@@ -124,7 +132,7 @@ class MainActivity : AppCompatActivity() {
             roundUpView.text = null
         }
 
-        submitBtn.isEnabled = !roundUpState.transferInProgress
+        submitBtn.isEnabled = !roundUpState.transferInProgress && roundUpState.roundUp != null
     }
 
     override fun onStop() {
