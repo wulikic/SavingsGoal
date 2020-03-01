@@ -16,7 +16,7 @@
         android:textStyle="italic"
         android:layout_gravity="start"
         android:paddingStart="20dp"
-        android:text="Select week to round up" />
+        android:text="Pick a week to round up" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/spinner"
