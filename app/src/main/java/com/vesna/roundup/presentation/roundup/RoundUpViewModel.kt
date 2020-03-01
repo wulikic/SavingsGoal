@@ -17,7 +17,7 @@ class RoundUpViewModel(
     private val addToSavingsGoal: AddToSavingsGoal
 ) : ViewModel() {
 
-    private val states = BehaviorSubject.createDefault(RoundUpState(roundUp = null))
+    private val states = BehaviorSubject.createDefault(RoundUpState(roundUp = null, transferInProgress = false))
     private val events = PublishSubject.create<Event>()
 
     private var calculateRoundUpDisposable: Disposable? = null
@@ -26,9 +26,11 @@ class RoundUpViewModel(
     fun onPeriodSelected(period: Period) {
         calculateRoundUpDisposable?.disposeIfNotDisposed()
         calculateRoundUpDisposable = calculateRoundUp.execute(period)
+            .doOnSubscribe { states.onNext(currentState().copy(transferInProgress = true)) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ states.onNext(RoundUpState(roundUp = it)) }, { e -> })
+            .doAfterTerminate { states.onNext(currentState().copy(transferInProgress = false)) }
+            .subscribe({ states.onNext(currentState().copy(roundUp = it)) }, { e -> events.onNext(FindingRoundUpFailed) })
     }
 
     fun onAddToSavingGoalClicked() {
@@ -37,7 +39,7 @@ class RoundUpViewModel(
                 addToSavingsGoal.execute(it)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ events.onNext(Success) }, { e -> events.onNext(Failure) })
+                    .subscribe({ events.onNext(MoneyTransferSucceeded) }, { e -> events.onNext(MoneyTransferFailed) })
             )
         }
     }
@@ -51,7 +53,11 @@ class RoundUpViewModel(
     fun states(): Observable<RoundUpState> = states
     fun events(): Observable<Event> = events
 
-    fun Disposable.disposeIfNotDisposed() {
+    private fun Disposable.disposeIfNotDisposed() {
         if (!isDisposed) dispose()
+    }
+
+    private fun currentState(): RoundUpState {
+        return states.value!!
     }
 }

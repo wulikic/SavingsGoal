@@ -1,3 +1,3 @@
 package com.vesna.roundup.presentation.roundup
 
-class RoundUpState(val roundUp: Int?) // TODO add loading
+data class RoundUpState(val roundUp: Int?, val transferInProgress: Boolean)
