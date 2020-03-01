@@ -1,6 +1,6 @@
 package com.vesna.roundup.di
 
-import com.vesna.roundup.weeks.MainActivity
+import com.vesna.roundup.presentation.MainActivity
 import dagger.Component
 import javax.inject.Singleton
 

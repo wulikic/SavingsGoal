@@ -46,6 +46,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:2.25.2"
 
     implementation 'net.danlew:android.joda:2.10.3'
+    testImplementation 'joda-time:joda-time:2.10.3'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"

@@ -1,7 +1,7 @@
 package com.vesna.roundup.data.localstorage
 
 import android.content.SharedPreferences
-import com.vesna.roundup.domain.Account
+import com.vesna.roundup.domain.model.Account
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import org.joda.time.DateTime
