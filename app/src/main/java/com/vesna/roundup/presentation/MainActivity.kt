@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage(message).create().show()
     }
 
-    private fun handleEvent(event: Event) {
+    private fun handleEvent(event: RoundUpEvent) {
         val message = when (event) {
             is MoneyTransferSucceeded -> "Money successfully transferred"
             is MoneyTransferFailed -> "Transferring money failed"
@@ -125,13 +125,8 @@ class MainActivity : AppCompatActivity() {
             .setMessage(message).create().show()
     }
 
-    private fun updateRoundUp(roundUpState: RoundUpState) {
-        roundUpState.roundUp?.let {
-            roundUpView.text = String.format("£ %s", it / 100.0)
-        } ?: kotlin.run {
-            roundUpView.text = null
-        }
-
+    private fun updateRoundUp(roundUpState: RoundUpUiState) {
+        roundUpView.text = roundUpState.roundUp
         submitBtn.isEnabled = !roundUpState.transferInProgress && roundUpState.roundUp != null
     }
 

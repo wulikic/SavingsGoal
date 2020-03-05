@@ -21,7 +21,6 @@ class GetWeeksTest {
 
     @Test
     fun multipleWeeks() {
-        // TOD what if 2 different timezones??
         val from = DateTime(2020, 2, 26, 0, 0, DateTimeZone.UTC)
         val downTo = DateTime(2020, 2, 9, 0, 0, DateTimeZone.UTC)
 

@@ -16,7 +16,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "USER_TOKEN", "\"eyJhbGciOiJQUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAAH1Ty5KcMAz8lS3Oqy0Y3txyyw_kA4QsZlwDNmWbSbZS-fcYzGOYbOVGd0vtlmV-R9LaqIlwlCB40B_Woemlurao7h-kh-g9slPrK8o8KYuKaijjywWyRNTQtmUFBZVxUSQVlrnwxfxrjJokr9KsiJO4fI8kukCkZVrOBBLpSbnvuhdsfkgxe2cXkWIpoK4LgizOLlCJKgHuqqr1Lm1K6L2dvrMKHUhpzRT74oxryPK8gjZNa58mjuu05TJLOt_hx_pGxNauXWmbohchL8ocfEKGGvMYUhJ0qbGIUcxdlvTIyyFLUrgtUUHhwI1hFG8vgvscXwQpWDnZSTZnvpfWnZgVCGF8yIaFdDsIinNIt4H3ygP_NNLxG07upo20fmUglZAPKSbsQ3GLPSpaoxEaAaSVM7oPB83MqmnVSTOgk1qB7qCblLC7ZPfTNxCOpsk6PWwj8oByNR5QCXTcCO7Z121wKRvQ3NnNaUfDHRv2Ae3_pHBW0MYeif2Yjq9mCfvc-K-4trKhG24jDOzQp8GGPFzUFS_JR_xk3qQA1iECOIpADnhdZwra9gnt1N-bbS98UIdtwIdzwLtBr8mv8Kl8IUDPu3xl1y6jO9lvoULKE7VUGSaWozsBe5bClVl8-DVYuOojx4lbo5-4xeeZAWdQWb_IrywO8QuvQwymzr-g-V1oI57czuxmc2a3fsfzPwNkH6_UKLqVmlpLxl_C_q6WFEgLsdzpMzFXRH_-AgWbilFABQAA.gAF_UBtP_Ix3VcsdnAS_rB04sYSkPAuK257HuEXpiYwYYmdWwNO9hB_DzxcWQLACUEGs1FrQe0z3YeMgUQT2HWaZTgYqxZZV-aQo_EP06ZnofaoSJtqhTln08cbmowlXs6Iqs8-2jogAjfPwg84oOkz_EG3Ec7ju9VlMY7AVXmpDQpSPCxSMdPuseJC4LGoxqsFMp_frRDzOHWvADJTxYyuOeR-NVfoM2OH-0OZIfxWVYUwgzgDBGY05O5gj8lG9ohAyDUs1d-LqHglQsxyYA_GC5OC6XKGqIsC5NDnRLujpXBgJ3GPgm1JaykQCF8EXUB2P9VIP_Ocmt7LOxSchk4TB7rBLh3tx9_OKUgEXYWGlCugJ4FNxsJInIXxmYnO0oarZ11zskUbDxOBuFE0LkA6t62vhYCaU-CVjulhq_yY9Kx_1dPwGQZM4cX2DkEy-nEy2z1jIts0uLpYAQH5j8m2IY5GThlrFqfWqXCLHSmPzCKAHa4Zqex9LKb2EcQ4S7ndLlMJtEesMMSLx7pMoTsT-E_WI0pbIqI1UbEkEMF7cTaSpfrt7GKNym-FPmZQ5Q_Jx-fRiyIZ0b7iCL_O8aEfiMkJz0n62NLGAFml9V8AkKkjeCw1LqfdZYv_JKeIjXOK3ciSZJIkI-kQcZHbut9zXIciFATokT0RakHiVRZU\""
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -30,8 +32,8 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
 
     implementation "io.reactivex.rxjava2:rxjava:2.2.16"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"

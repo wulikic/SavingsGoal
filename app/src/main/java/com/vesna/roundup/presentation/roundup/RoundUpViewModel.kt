@@ -11,6 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.text.NumberFormat
 import java.util.*
 
 class RoundUpViewModel(
@@ -18,18 +19,22 @@ class RoundUpViewModel(
     private val addToSavingsGoal: AddToSavingsGoal
 ) : ViewModel() {
 
-    private val states = BehaviorSubject.createDefault(RoundUpState(roundUp = null, transferInProgress = false))
-    private val events = PublishSubject.create<Event>()
+    private val states =
+        BehaviorSubject.createDefault(RoundUpState(roundUp = null, transferInProgress = false))
+    private val events = PublishSubject.create<RoundUpEvent>()
 
     private var calculateRoundUpDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
+    private val numberFormat = NumberFormat.getCurrencyInstance(Locale.UK)
 
     fun onPeriodSelected(period: Period) {
         calculateRoundUpDisposable?.disposeIfNotDisposed()
         calculateRoundUpDisposable = calculateRoundUp.execute(period)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ states.onNext(currentState().copy(roundUp = it)) }, { e -> events.onNext(FindingRoundUpFailed) })
+            .subscribe(
+                { states.onNext(currentState().copy(roundUp = it)) },
+                { e -> events.onNext(FindingRoundUpFailed) })
     }
 
     fun onAddToSavingGoalClicked() {
@@ -40,7 +45,9 @@ class RoundUpViewModel(
                     .doAfterTerminate { states.onNext(currentState().copy(transferInProgress = false)) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ events.onNext(MoneyTransferSucceeded) }, { e -> events.onNext(MoneyTransferFailed) })
+                    .subscribe(
+                        { events.onNext(MoneyTransferSucceeded) },
+                        { e -> events.onNext(MoneyTransferFailed) })
             )
         }
     }
@@ -51,8 +58,14 @@ class RoundUpViewModel(
         disposables.clear()
     }
 
-    fun states(): Observable<RoundUpState> = states
-    fun events(): Observable<Event> = events
+    fun states(): Observable<RoundUpUiState> = states.map {
+        RoundUpUiState(
+            roundUp = it.roundUp?.let { pennies -> numberFormat.format(pennies.div(100.0)) },
+            transferInProgress = it.transferInProgress
+        )
+    }
+
+    fun events(): Observable<RoundUpEvent> = events
 
     private fun Disposable.disposeIfNotDisposed() {
         if (!isDisposed) dispose()
@@ -61,4 +74,6 @@ class RoundUpViewModel(
     private fun currentState(): RoundUpState {
         return states.value!!
     }
+
+    data class RoundUpState(val roundUp: Int?, val transferInProgress: Boolean)
 }

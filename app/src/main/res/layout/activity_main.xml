@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -11,17 +10,21 @@
     <TextView
         android:id="@+id/goal"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center_vertical"
         android:textStyle="italic"
+        android:textColor="@color/colorPrimary"
         android:layout_gravity="start"
-        android:paddingStart="20dp"
+        android:paddingStart="30dp"
         android:text="Pick a week to round up" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:dropDownVerticalOffset="50dp"
         android:gravity="center_vertical" />
 
     <TextView
@@ -32,16 +35,17 @@
         android:gravity="center"
         android:textSize="50sp"
         android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         tools:text="£1.85"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submit"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:textSize="20sp"
-        android:padding="20dp"
-        android:background="@color/colorAccent"
-        android:text="Add to goal"/>
+        android:text="Add to goal"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
 </LinearLayout>
