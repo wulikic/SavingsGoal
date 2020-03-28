@@ -30,7 +30,7 @@ class CalculateRoundUpTest {
     }
 
     @Test
-    fun testOne() {
+    fun testRoundUpForOneTransaction() {
         val transaction = Transaction(350, Transaction.Direction.OUT)
         val account = mockk<Account>()
         every { api.getTransactions(any(), any(), any()) } returns Single.just(listOf(transaction))
@@ -39,7 +39,7 @@ class CalculateRoundUpTest {
     }
 
     @Test
-    fun testTwo() {
+    fun testRoundupForTwoTransactions() {
         val transaction1 = Transaction(350, Transaction.Direction.OUT)
         val transaction2 = Transaction(70, Transaction.Direction.OUT)
         val account = mockk<Account>()

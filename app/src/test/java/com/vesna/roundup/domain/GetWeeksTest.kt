@@ -20,7 +20,7 @@ class GetWeeksTest {
     }
 
     @Test
-    fun multipleWeeks() {
+    fun testPeriodOfMultipleWeeks() {
         val from = DateTime(2020, 2, 26, 0, 0, DateTimeZone.UTC)
         val downTo = DateTime(2020, 2, 9, 0, 0, DateTimeZone.UTC)
 
@@ -47,7 +47,7 @@ class GetWeeksTest {
     }
 
     @Test
-    fun oneWeek() {
+    fun testPeriodWithinOneWeek() {
         val from = DateTime(2020, 3, 1, 0, 0, DateTimeZone.UTC)
         val downTo = DateTime(2020, 2, 27, 0, 0, DateTimeZone.UTC)
 
